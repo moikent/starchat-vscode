@@ -1,0 +1,248 @@
+{
+  "name": "starchat",
+  "displayName": "Starchat: write and improve code using AI",
+  "description": "Use Starchat right inside the IDE to enhance and automate your coding with AI-powered assistance (unofficial)",
+  "version": "1.0.0",
+  "publisher": "moikent",
+  "icon": "resources/extensionIcon.png",
+  "license": "MIT",
+  "repository": {
+    "url": "https://github.com/moikent/starchat-vscode"
+  },
+  "engines": {
+    "vscode": "^1.73.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "huggingface",
+    "starchat",
+    "chatgpt",
+    "copilot",
+    "ai",
+    "explain",
+    "find bugs",
+    "explain ",
+    "refactor"
+  ],
+  "activationEvents": [
+    "onView:chatgpt.chatView",
+    "onCommand:chatgpt.ask",
+    "onCommand:chatgpt.explain",
+    "onCommand:chatgpt.refactor",
+    "onCommand:chatgpt.optimize",
+    "onCommand:chatgpt.findProblems",
+    "onCommand:chatgpt.documentation"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "chatgpt.explain",
+        "title": "Starchat: Explain selection"
+      },
+      {
+        "command": "chatgpt.refactor",
+        "title": "Starchat: Refactor selection"
+      },
+      {
+        "command": "chatgpt.findProblems",
+        "title": "Starchat: Find problems"
+      },
+      {
+        "command": "chatgpt.optimize",
+        "title": "Starchat: Optimize selection"
+      },
+      {
+        "command": "chatgpt.documentation",
+        "title": "Starchat: Write documentation"
+      },
+      {
+        "command": "chatgpt.resetConversation",
+        "title": "Reset Starchat conversation"
+      },
+      {
+        "command": "chatgpt.tryAgain",
+        "title": "Retry Starchat request"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "chatgpt.explain",
+          "when": "editorHasSelection",
+          "group": "chatgpt-menu-group@2"
+        },
+        {
+          "command": "chatgpt.refactor",
+          "when": "editorHasSelection",
+          "group": "chatgpt-menu-group@3"
+        },
+        {
+          "command": "chatgpt.findProblems",
+          "when": "editorHasSelection",
+          "group": "chatgpt-menu-group@4"
+        },
+        {
+          "command": "chatgpt.optimize",
+          "when": "editorHasSelection",
+          "group": "chatgpt-menu-group@5"
+        },
+        {
+          "command": "chatgpt.documentation",
+          "when": "editorHasSelection",
+          "group": "chatgpt-menu-group@6"
+        }
+      ],
+      "commandPalette": [
+        {
+          "command": "chatgpt.explain",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "chatgpt.refactor",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "chatgpt.findProblems",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "chatgpt.optimize",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "chatgpt.documentation",
+          "when": "editorHasSelection"
+        },
+        {
+          "command": "chatgpt.resetConversation"
+        }
+      ]
+    },
+    "viewsContainers": {
+      "activitybar": [
+        {
+          "id": "chatgpt",
+          "title": "Starchat",
+          "icon": "resources/icon.png"
+        }
+      ]
+    },
+    "views": {
+      "chatgpt": [
+        {
+          "type": "webview",
+          "id": "chatgpt.chatView",
+          "name": "Starchat"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "Starchat",
+      "type": "object",
+      "properties": {
+        "starchat.apiKey": {
+          "markdownDescription": "Huggingface access token from [https://huggingface.co/settings/tokens](https://huggingface.co/settings/tokens)",
+          "type": "string",
+          "order": 0
+        },
+        "starchat.apiUrl": {
+          "markdownDescription": "Huggingface Starchat API URL or other custom API URL. Defaults to [https://api-inference.huggingface.co/models/HuggingFaceH4/starchat-beta](https://api-inference.huggingface.co/models/HuggingFaceH4/starchat-beta)",
+          "type": "string",
+          "default": "https://api-inference.huggingface.co/models/HuggingFaceH4/starchat-beta",
+          "order": 1
+        },
+        "starchat.promptPrefix.explain": {
+          "type": "string",
+          "default": "Explain what this code does: ",
+          "description": "The prompt prefix used for explaining the selected code",
+          "order": 3
+        },
+        "starchat.promptPrefix.refactor": {
+          "type": "string",
+          "default": "Refactor this code and explain what's changed: ",
+          "description": "The prompt prefix used for refactoring the selected code",
+          "order": 4
+        },
+        "starchat.promptPrefix.findProblems": {
+          "type": "string",
+          "default": "Find problems with the following code, fix them and explain what was wrong (Do not change anything else, if there are no problems say so): ",
+          "description": "The prompt prefix used for finding problems in the selected code",
+          "order": 5
+        },
+        "starchat.promptPrefix.documentation": {
+          "type": "string",
+          "default": "Write documentation for the following code: ",
+          "description": "The prompt prefix used for writing documentation for the selected code",
+          "order": 7
+        },
+        "starchat.promptPrefix.optimize": {
+          "type": "string",
+          "default": "Optimize the following code if there is anything to improve, if not say so: ",
+          "description": "The prompt prefix used for optimizing the selected code",
+          "order": 6
+        },
+        "starchat.maxNewTokens": {
+          "type": "number",
+          "default": 1024,
+          "description": "The amount of new tokens to be generated, this does not include the input length it is a estimate of the size of generated text you want. Each new tokens slows down the request, so look for balance between response times and length of text generated.",
+          "order": 10
+        },
+        "starchat.temperature": {
+          "type": "number",
+          "default": 0.2,
+          "description": "The temperature of the sampling operation. 1 means regular sampling, 0 means always take the highest score, 100.0 is getting closer to uniform probability.",
+          "order": 11
+        },
+        "starchat.topK": {
+          "type": "number",
+          "default": 50,
+          "description": "Integer to define the top tokens considered within the sample operation to create new text",
+          "order": 12
+        },
+        "starchat.topP": {
+          "type": "number",
+          "default": 0.95,
+          "description": "Float to define the tokens that are within the sample operation of text generation. Add tokens in the sample for more probable to least probable until the sum of the probabilities is greater than top_p.",
+          "order": 13
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "yarn run package",
+    "compile": "webpack",
+    "watch": "node ./node_modules/webpack-dev-server/bin/webpack-dev-server.js --config webpack.config.js --watch",
+    "package": "webpack --mode production --devtool hidden-source-map",
+    "compile-tests": "tsc -p . --outDir out",
+    "watch-tests": "tsc -p . -w --outDir out",
+    "pretest": "yarn run compile-tests && yarn run compile && yarn run lint",
+    "lint": "eslint src --ext ts",
+    "test": "node ./out/test/runTest.js",
+    "update-package-lock": "npm install --package-lock-only"
+  },
+  "devDependencies": {
+    "@types/glob": "^8.0.0",
+    "@types/mocha": "^10.0.1",
+    "@types/node": "16.x",
+    "@types/vscode": "^1.73.0",
+    "@typescript-eslint/eslint-plugin": "^5.45.0",
+    "@typescript-eslint/parser": "^5.45.0",
+    "@vscode/test-electron": "^2.2.0",
+    "eslint": "^8.28.0",
+    "glob": "^8.0.3",
+    "mocha": "^10.1.0",
+    "ts-loader": "^9.4.1",
+    "typescript": "^4.9.5",
+    "webpack": "^5.87.0",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "@huggingface/inference": "^2.5.2",
+    "node-fetch-polyfill": "^2.0.6",
+    "yarn": "^1.22.19"
+  }
+}
