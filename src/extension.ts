@@ -89,7 +89,6 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 	public static readonly viewType = 'chatgpt.chatView';
 	private _view?: vscode.WebviewView;
 	private _chatGPTAPI?: HfInference;
-	private _conversation?: any;
 
 	private _response?: string;
 	private _prompt?: string;
@@ -181,20 +180,6 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 			}
 		});
 	}
-
-
-	public async resetConversation() {
-		console.log(this, this._conversation);
-		if (this._conversation) {
-			this._conversation = null;
-		}
-		this._prompt = '';
-		this._response = '';
-		this._fullPrompt = '';
-		this._view?.webview.postMessage({ type: 'setPrompt', value: '' });
-		this._view?.webview.postMessage({ type: 'addResponse', value: '' });
-	}
-
 
 	public async search(prompt?: string) {
 		this._prompt = prompt;
