@@ -257,10 +257,9 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 				for await (const output of this._chatGPTAPI.textGenerationStream({
 					model: BASE_URL,
 					inputs: this._fullPrompt,
-					parameters: { max_new_tokens: 1024, temperature: 0.2, top_k: 50, top_p: 0.95 }
+					parameters: { max_new_tokens: this._settings.maxNewTokens, temperature: this._settings.temperature, top_k: this._settings.topK, top_p: this._settings.topP }
 				}, { fetch: fetch })) {
 					if (this._view && this._view.visible) {
-						// response = output.token.text;
 						if (output.token.text === "<|end|>") {
 							break;
 						}
