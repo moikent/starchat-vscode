@@ -2,7 +2,7 @@
   "name": "starchat",
   "displayName": "Starchat: write and improve code using AI",
   "description": "Use Starchat right inside the IDE to enhance and automate your coding with AI-powered assistance (unofficial)",
-  "version": "1.0.0",
+  "version": "1.0.2",
   "publisher": "moikent",
   "icon": "resources/extensionIcon.png",
   "license": "MIT",

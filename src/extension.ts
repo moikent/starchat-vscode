@@ -138,7 +138,6 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 			console.warn("API key or API URL not set, please go to extension settings (read README.md for more info)");
 		}
 		else {
-			console.log("api key is", this._authInfo.apiKey);
 			this._chatGPTAPI = new HfInference(this._authInfo.apiKey || "xx");
 		}
 	}
@@ -228,7 +227,7 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 		} else {
 			// If successfully signed in
 			console.log("sendMessage");
-			console.log("set prompt", this._prompt)
+			console.log("set prompt", this._prompt);
 			// Make sure the prompt is shown
 			this._view?.webview.postMessage({ type: 'setPrompt', value: this._prompt });
 			this._view?.webview.postMessage({ type: 'addResponse', value: '...' });
@@ -238,9 +237,8 @@ class TextGenerationViewProvider implements vscode.WebviewViewProvider {
 			try {
 				// HFInference
 				let temp_response = "";
-
 				for await (const output of this._chatGPTAPI.textGenerationStream({
-					model: BASE_URL,
+					model: this._settings.apiUrl || BASE_URL,
 					inputs: this._fullPrompt,
 					parameters: { max_new_tokens: this._settings.maxNewTokens, temperature: this._settings.temperature, top_k: this._settings.topK, top_p: this._settings.topP }
 				}, { fetch: fetch })) {
